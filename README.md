@@ -45,7 +45,7 @@ PORT=5000
 Create `frontend/.env` with:
 
 ```text
-VITE_API_URL=http://localhost:5000
+VITE_API_BASE_URL=http://localhost:5000
 ```
 
 ### Install

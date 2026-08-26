@@ -6,7 +6,7 @@ import RecoveryChart from './components/RecoveryChart'
 import SummaryBar from './components/SummaryBar'
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000',
+  baseURL: import.meta.env.VITE_API_BASE_URL,
 })
 
 function App() {
