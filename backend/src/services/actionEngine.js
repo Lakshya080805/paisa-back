@@ -110,12 +110,14 @@ async function processRetryAttempt(caseDocument, actionName = 'retry_immediate')
 
   const nextRetryCount = retryCount + 1;
   const shouldStop = nextRetryCount >= MAX_RETRIES;
+  const nextActionAt = shouldStop ? null : new Date();
 
   const updatedCase = await Case.findByIdAndUpdate(
     caseDocument._id,
     {
       status: shouldStop ? 'lost' : 'action_taken',
       retryCount: nextRetryCount,
+      nextActionAt,
       updatedAt: new Date(),
     },
     { returnDocument: 'after' },

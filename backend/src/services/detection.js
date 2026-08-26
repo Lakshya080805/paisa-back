@@ -68,6 +68,7 @@ const detectCases = async () => {
 	}
 
 	console.log(`Detection complete: ${createdCount} Cases created, ${skippedCount} skipped as already-existing.`);
+	return { createdCount, skippedCount };
 };
 
 const runDetection = async () => {

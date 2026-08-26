@@ -120,6 +120,9 @@ const isRateLimitError = (error) =>
 	error?.message?.includes('429') ||
 	error?.message?.includes('quota');
 
+const isDailyQuotaError = (error) =>
+	error?.message?.includes('PerDayPerProjectPerModel-FreeTier');
+
 const getDiagnosis = async (eventContext) => {
 	let responseText;
 
@@ -137,7 +140,7 @@ const getDiagnosis = async (eventContext) => {
 				responseText = result.response.text();
 				break;
 			} catch (error) {
-				if (attempt === 0 && isRateLimitError(error)) {
+				if (attempt === 0 && isRateLimitError(error) && !isDailyQuotaError(error)) {
 					console.error('Gemini rate limit (429); retrying once in 20 seconds.');
 					await delay(20000);
 					continue;
