@@ -13,9 +13,13 @@ const FAILURE_REASONS = [
 	'network_timeout',
 ];
 
-const RECORD_COUNT = 72;
-const PENDING_COUNT = 10;
-const REPEATED_CUSTOMER_COUNT = 8;
+const requestedRecordCount = Number.parseInt(process.env.SEED_COUNT || '72', 10);
+const RECORD_COUNT = Number.isInteger(requestedRecordCount)
+	? Math.min(Math.max(requestedRecordCount, 1), 80)
+	: 72;
+const PENDING_COUNT = Math.max(1, Math.floor(RECORD_COUNT * 0.14));
+const REPEATED_CUSTOMER_COUNT = Math.min(8, Math.max(1, Math.floor(RECORD_COUNT / 5)));
+const GUARANTEED_FAILURE_COUNT = Math.min(3, RECORD_COUNT);
 
 const randomDateWithinLast14Days = () => {
 	const now = Date.now();
@@ -41,24 +45,31 @@ const buildCustomerIds = () => {
 
 const generateEvents = () => {
 	const customerIds = buildCustomerIds();
+	const guaranteedFailureStart = Math.max(PENDING_COUNT, RECORD_COUNT - GUARANTEED_FAILURE_COUNT);
 
 	return Array.from({ length: RECORD_COUNT }, (_, index) => {
-		const isPending = index < PENDING_COUNT;
+		const isGuaranteedFailure = index >= guaranteedFailureStart;
+		const isPending = index < PENDING_COUNT && !isGuaranteedFailure;
 		const isRepeatedCustomer = index < REPEATED_CUSTOMER_COUNT * 2;
 		const type = isRepeatedCustomer
-			? index % 2 === 0
-				? 'subscription'
-				: 'subscription'
+			? 'subscription'
 			: faker.helpers.arrayElement(['subscription', 'payment']);
+		const customerId = isGuaranteedFailure
+			? `demo_guaranteed_failure_${index}_${faker.string.uuid()}`
+			: customerIds[index];
 
 		return {
-			customerId: customerIds[index],
+			customerId,
 			type,
 			amount: faker.number.int({ min: 200, max: 15000 }),
 			status: isPending ? 'pending' : 'failed',
 			...(isPending
 				? {}
-				: { failureReason: FAILURE_REASONS[(index - PENDING_COUNT) % FAILURE_REASONS.length] }),
+				: {
+					failureReason: isGuaranteedFailure
+						? 'network_timeout'
+						: FAILURE_REASONS[(index - PENDING_COUNT) % FAILURE_REASONS.length],
+				}),
 			createdAt: randomDateWithinLast14Days(),
 		};
 	});

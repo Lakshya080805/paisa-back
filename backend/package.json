@@ -6,7 +6,11 @@
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
     "seed": "node src/services/dataGenerator.js",
-    "detect": "node src/services/detection.js"
+    "detect": "node src/services/detection.js",
+    "diagnose": "node src/services/diagnosis.js",
+    "gate": "node src/services/decisionGate.js",
+    "act": "node src/services/actionEngine.js",
+    "add-incentive-cases": "node src/scripts/addIncentiveCases.js"
   },
   "keywords": [],
   "author": "",
