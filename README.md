@@ -1,5 +1,10 @@
 # AI Revenue Recovery Agent
 
+**🔗 Live Frontend:** [https://paisa-back.vercel.app/](https://paisa-back.vercel.app/)
+**🔗 Live Backend API:** [https://paisa-back.onrender.com](https://paisa-back.onrender.com)
+
+> Note: the backend is hosted on Render's free tier and may take 30–60 seconds to respond on the first request after a period of inactivity (cold start).
+
 ## Problem
 
 Businesses lose revenue silently through failed subscription charges and one-off payments. This agent detects at-risk revenue, diagnoses the failure cause, chooses a bounded recovery action, executes it, and proves the outcome with measured numbers and an audit trail.
@@ -19,7 +24,7 @@ The flow is: detection → diagnosis → decision gate → action engine → aud
 - LLM: Gemini API with structured JSON output
 - Payments: Razorpay Test Mode API
 - Frontend: React, Vite, Tailwind CSS, and Recharts
-- Hosting target: Render, Vercel, and MongoDB Atlas
+- Hosting: Render (backend), Vercel (frontend), MongoDB Atlas (database)
 
 ## Run Locally
 
@@ -53,7 +58,6 @@ VITE_API_BASE_URL=http://localhost:5000
 ```bash
 cd backend
 npm install
-
 cd ../frontend
 npm install
 ```
@@ -84,16 +88,19 @@ Backend pipeline scripts:
 
 The frontend also supports `npm run dev`, `npm run build`, `npm run lint`, and `npm run preview`.
 
-## API and Demo
+## API Routes
 
-Live demo: [DEPLOYED_URL_HERE]
+All routes below are served by the **backend** at `https://paisa-back.onrender.com` — not the frontend. For example, cases live at `https://paisa-back.onrender.com/api/cases`, not `https://paisa-back.vercel.app/api/cases` (the frontend domain has no API routes of its own; it calls these backend routes internally).
 
-Key API routes:
+| Method | Route | Purpose |
+|---|---|---|
+| GET | `/api/cases` | List all cases (supports `?status=` filter) |
+| GET | `/api/cases/:id` | Single case with its full audit trail |
+| GET | `/api/metrics` | Aggregated recovery metrics |
+| GET | `/api/health` | Server health check |
+| POST | `/api/run-batch` | Runs the full pipeline (generate → detect → diagnose → gate → act) |
 
-- `GET /api/cases`
-- `GET /api/cases/:id`
-- `GET /api/metrics`
-- `POST /api/run-batch`
+`POST /api/run-batch` cannot be tested by visiting the URL in a browser — browsers only send GET requests when you type a URL into the address bar. Use the **Run Batch** button on the live dashboard, or a tool like `curl` or Postman with the method explicitly set to POST.
 
 ## Verified Batch Metrics
 
