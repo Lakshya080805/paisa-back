@@ -10,6 +10,7 @@
     "diagnose": "node src/services/diagnosis.js",
     "gate": "node src/services/decisionGate.js",
     "act": "node src/services/actionEngine.js",
+    "reset": "node src/scripts/reset.js",
     "add-incentive-cases": "node src/scripts/addIncentiveCases.js"
   },
   "keywords": [],

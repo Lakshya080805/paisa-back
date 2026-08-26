@@ -73,7 +73,7 @@ function App() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-950 px-4 py-6 text-slate-100 sm:px-8 lg:px-12">
+    <main className="min-h-screen overflow-x-hidden bg-slate-950 px-4 py-6 text-slate-100 sm:px-8 lg:px-12">
       <div className="mx-auto max-w-7xl">
         <header className="mb-8 flex flex-col gap-4 border-b border-slate-800 pb-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -92,6 +92,7 @@ function App() {
           </button>
         </header>
 
+        {runningBatch && <p className="-mt-5 mb-6 text-sm text-cyan-300">Running pipeline, this may take a minute...</p>}
         {error && <div className="mb-6 rounded-lg border border-rose-900 bg-rose-950/50 px-4 py-3 text-sm text-rose-200">{error}</div>}
 
         <div className="space-y-6">
@@ -102,6 +103,10 @@ function App() {
           </section>
           <CaseDrilldown caseId={selectedCaseId} onClose={() => setSelectedCaseId(null)} />
         </div>
+
+        <footer className="mt-10 border-t border-slate-800 pt-5 text-xs leading-5 text-slate-500">
+          SMS/email reminders and payment method links are simulated and logged; payment retries call Razorpay&apos;s real test-mode API.
+        </footer>
       </div>
     </main>
   )

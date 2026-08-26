@@ -2,12 +2,14 @@ const currencyFormatter = new Intl.NumberFormat('en-IN', {
 	maximumFractionDigits: 0,
 });
 
+const safeNumber = (value) => Number.isFinite(Number(value)) ? Number(value) : 0;
+
 function SummaryBar({ metrics }) {
 	const stats = [
-		{ label: 'Total At Risk', value: metrics?.totalAtRisk || 0 },
-		{ label: 'Total Recovered', value: metrics?.totalRecovered || 0 },
-		{ label: 'Net Recovery', value: metrics?.netRecovered || 0 },
-		{ label: 'Recovery Rate', value: `${metrics?.recoveryRate || 0}%`, isRate: true },
+		{ label: 'Total At Risk', value: safeNumber(metrics?.totalAtRisk) },
+		{ label: 'Total Recovered', value: safeNumber(metrics?.totalRecovered) },
+		{ label: 'Net Recovery', value: safeNumber(metrics?.netRecovered) },
+		{ label: 'Recovery Rate', value: `${safeNumber(metrics?.recoveryRate)}%`, isRate: true },
 	];
 
 	return (

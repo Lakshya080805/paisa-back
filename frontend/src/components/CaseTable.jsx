@@ -40,7 +40,7 @@ function CaseTable({ cases = [], onCaseClick }) {
 			</div>
 
 			<div className="overflow-x-auto">
-				<table className="w-full min-w-[900px] border-collapse text-left text-sm">
+				{cases.length === 0 ? <p className="py-10 text-center text-sm text-slate-400">No data yet — run a batch to get started</p> : <table className="w-full min-w-225 border-collapse text-left text-sm">
 					<thead>
 						<tr className="border-b border-slate-800 text-xs uppercase tracking-wide text-slate-500">
 							{['Customer ID', 'Cause', 'Recommended Action', 'At Risk', 'Recovered', 'Status', 'Confidence'].map((heading) => (
@@ -59,22 +59,22 @@ function CaseTable({ cases = [], onCaseClick }) {
 								tabIndex="0"
 								className="cursor-pointer border-b border-slate-800/80 text-slate-300 outline-none transition hover:bg-slate-800/60 focus:bg-slate-800/60"
 							>
-								<td className="max-w-56 truncate px-3 py-3 font-mono text-xs text-slate-200">{caseDocument.customerId}</td>
+								<td className="max-w-56 truncate px-3 py-3 font-mono text-xs text-slate-200">{caseDocument.customerId || '—'}</td>
 								<td className="px-3 py-3">{caseDocument.cause || '—'}</td>
 								<td className="px-3 py-3">{caseDocument.recommendedAction || '—'}</td>
-								<td className="px-3 py-3 tabular-nums">₹{currencyFormatter.format(caseDocument.amountAtRisk || 0)}</td>
-								<td className="px-3 py-3 tabular-nums">₹{currencyFormatter.format(caseDocument.amountRecovered || 0)}</td>
+								<td className="px-3 py-3 tabular-nums">₹{currencyFormatter.format(Number.isFinite(Number(caseDocument.amountAtRisk)) ? Number(caseDocument.amountAtRisk) : 0)}</td>
+								<td className="px-3 py-3 tabular-nums">₹{currencyFormatter.format(Number.isFinite(Number(caseDocument.amountRecovered)) ? Number(caseDocument.amountRecovered) : 0)}</td>
 								<td className="px-3 py-3">
 									<span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold capitalize ring-1 ${statusClasses[caseDocument.status] || statusClasses.detected}`}>
-										{caseDocument.status?.replace('_', ' ') || 'unknown'}
+										{caseDocument.status?.replace('_', ' ') || '—'}
 									</span>
 								</td>
 								<td className="px-3 py-3 tabular-nums">{typeof caseDocument.confidence === 'number' ? `${Math.round(caseDocument.confidence * 100)}%` : '—'}</td>
 							</tr>
 						))}
 					</tbody>
-				</table>
-				{filteredCases.length === 0 && <p className="py-10 text-center text-sm text-slate-500">No cases match this status.</p>}
+				</table>}
+				{cases.length > 0 && filteredCases.length === 0 && <p className="py-10 text-center text-sm text-slate-500">No cases match this status.</p>}
 			</div>
 		</section>
 	)

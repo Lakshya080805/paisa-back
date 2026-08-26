@@ -22,6 +22,15 @@ function RecoveryTooltip({ active, payload, label }) {
 }
 
 function RecoveryChart({ byCause = [] }) {
+	if (!byCause.length) {
+		return (
+			<section aria-label="Recovery by cause" className="rounded-lg border border-slate-800 bg-slate-900 p-5">
+				<h2 className="text-lg font-semibold text-white">Recovery by cause</h2>
+				<p className="mt-4 text-sm text-slate-400">No data yet — run a batch to get started</p>
+			</section>
+		)
+	}
+
 	return (
 		<section aria-label="Recovery by cause" className="rounded-lg border border-slate-800 bg-slate-900 p-5">
 			<div className="mb-4">

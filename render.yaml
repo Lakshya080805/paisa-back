@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: ai-revenue-recovery-agent-api
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      # Set these values in the Render dashboard; do not commit secrets here.
+      - key: MONGODB_URI
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: RAZORPAY_KEY_ID
+        sync: false
+      - key: RAZORPAY_KEY_SECRET
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      # Render supplies PORT for web services; configure this placeholder only if needed.
+      - key: PORT
+        sync: false
